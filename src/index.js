@@ -23,6 +23,8 @@ app.on('ready', () => {
     mainWindow = null;
   });
 
+  //mainWindow.openDevTools();
+
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
