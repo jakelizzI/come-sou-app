@@ -3,10 +3,13 @@
 const electron = require('electron');
 const localShortcut = require('electron-localshortcut');
 
+const ipcMain = electron.ipcMain;
+
 let app = electron.app;
 let BrowserWindow = electron.BrowserWindow;
 
 let mainWindow;
+let secondWindow;
 
 app.on('ready', () => {
 
@@ -15,17 +18,36 @@ app.on('ready', () => {
     height: 600,
     'frame': false,
     'fullscreen': true,
-    'transparent': true
+    'transparent': true,
+    'alwaysOnTop': true
   })
   mainWindow.loadURL('file://' + __dirname + '/index.html');
 
+  secondWindow = new BrowserWindow({ 
+    parent: mainWindow,
+    webPreferences: {
+      nodeIntegration: true
+    }
+   });
+  secondWindow.loadURL('file://' + __dirname + '/second.html');
+
+  secondWindow.show();
+
   localShortcut.register(mainWindow, 'Ctrl+W', () => {
-    mainWindow = null;
+    app.quit();
   });
 
-  //mainWindow.openDevTools();
+  secondWindow.openDevTools();
+
+  secondWindow.on('closed', () => {
+    secondWindow = null;
+  });
 
   mainWindow.on('closed', () => {
-    mainWindow = null;
+     mainWindow = null;
   });
+});
+
+ipcMain.on('press-button', (e, args) => {
+  console.log(args);
 });

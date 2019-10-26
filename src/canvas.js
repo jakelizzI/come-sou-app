@@ -7,22 +7,23 @@ canvas.width = winX;
 canvas.height = winH;
 
 const sendComment = (text, x, y) => {
-  const mes = context.measureText(text);
-  context.clearRect(x, y + 5, 160, -30);
+  const textSize = context.measureText(text).width;
+  console.log(textSize);
+  context.clearRect(x, y + 5, textSize + 5, -30);
 
-  context.font = "30px 'ＭＳ ゴシック'";
   context.fillStyle = 'yellow';
   context.fillText(text, x, y);
 
-  window.requestAnimationFrame( ts => sendComment("こんにちは", x - 5, y));
+  window.requestAnimationFrame( ts => sendComment(text, x - 5, y));
 }
 
 const onClick = (e) => {
+  context.font = "30px 'ＭＳ ゴシック'";
 
   const x = e.clientX
   const y = e.clientY
 
-  window.requestAnimationFrame( ts => sendComment("こんにちは", x, y));
+  window.requestAnimationFrame( ts => sendComment("そんなバナナ", x, y));
 }
 
 canvas.addEventListener('click', onClick, false);
