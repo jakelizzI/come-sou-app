@@ -29,15 +29,15 @@ app.on('ready', () => {
       nodeIntegration: true
     }
    });
-  secondWindow.loadURL('file://' + __dirname + '/second.html');
+  secondWindow.loadURL('file://' + __dirname + '/auth.html');
 
   secondWindow.show();
+
+  // mainWindow.openDevTools();
 
   localShortcut.register(mainWindow, 'Ctrl+W', () => {
     app.quit();
   });
-
-  secondWindow.openDevTools();
 
   secondWindow.on('closed', () => {
     secondWindow = null;
