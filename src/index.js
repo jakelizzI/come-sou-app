@@ -33,9 +33,11 @@ app.on('ready', () => {
 
   secondWindow.show();
 
-  // mainWindow.openDevTools();
+  mainWindow.openDevTools();
 
   localShortcut.register(mainWindow, 'Ctrl+W', () => {
+    secondWindow = null;
+    mainWindow = null;
     app.quit();
   });
 
