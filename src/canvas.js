@@ -1,4 +1,8 @@
+const ipcRenderer = require('electron').ipcRenderer;
+const win = require('electron').remote.getCurrentWindow()
+
 const canvas = document.getElementById('canvas');
+const closeButton = document.getElementById('close-button');
 const context = canvas.getContext('2d');
 const winX = window.parent.screen.width;
 const winY = window.parent.screen.height;
@@ -7,6 +11,17 @@ canvas.width = winX;
 canvas.height = winY;
 
 const commentArray = new Array();
+
+const sock = new WebSocket("ws://127.0.0.1:5001");
+
+sock.addEventListener('open', e => {
+  console.log('socket : 接続成功');
+})
+
+sock.addEventListener('message', e => {
+  console.log('event listened : ' + e.data);
+  onClick(e.data);
+})
 
 const defaultY = 30;
 
@@ -61,18 +76,31 @@ const sendComment = () => {
   window.requestAnimationFrame( ts => sendComment(commentArray));
 }
 
-const onClick = () => {
+const onClick = (text) => {
   context.font = "30px 'Segoe UI'";
-  context.fillStyle = 'blue';
-  const randWards = ["こんにちは","こんにちはこんにちは","これは一体？","やっぱりな","へぇ","それな"];
-  const no = Math.floor(Math.random() * 6);
-  const text = randWards[no];
+  context.fillStyle = 'yellow';
+  // const randWards = ["こんにちは","こんにちはこんにちは","これは一体？","やっぱりな","へぇ","それな"];
+  // const no = Math.floor(Math.random() * 6);
+  // const text = randWards[no];
 
   const textWidth = context.measureText(text).width;
 
   commentArray.push(new Comment(winX, null, text, textWidth));
 }
 
-canvas.addEventListener('click', onClick, false);
+// canvas.addEventListener('click', onClick, false);
+
+closeButton.addEventListener('mouseenter', () => {
+  win.setIgnoreMouseEvents(false);
+});
+closeButton.addEventListener('mouseleave', () => {
+  win.setIgnoreMouseEvents(false);
+});
+
+closeButton.addEventListener('click', () => {
+    ipcRenderer.send('press-button', 'puressed');
+  },
+  false
+);
 
 window.onload = window.requestAnimationFrame( ts => sendComment());
