@@ -1,4 +1,4 @@
-class Comment {
+module.exports = class Comment {
   constructor(x, y, text, textWidth) {
     this.x = x;
     this.y = y;

@@ -1,5 +1,6 @@
 const ipcRenderer = require('electron').ipcRenderer;
-const win = require('electron').remote.getCurrentWindow()
+const win = require('electron').remote.getCurrentWindow();
+const Comment = require('./comment');
 
 const canvas = document.getElementById('canvas');
 const closeButton = document.getElementById('close-button');
@@ -12,6 +13,10 @@ canvas.height = winY;
 
 const commentArray = new Array();
 
+ipcRenderer.on('config', store => {
+  console.log(store);
+});
+
 const sock = new WebSocket("ws://127.0.0.1:5001");
 
 sock.addEventListener('open', e => {
@@ -23,7 +28,7 @@ sock.addEventListener('message', e => {
   onClick(e.data);
 })
 
-const defaultY = 30;
+const defaultY = 48;
 
 const sendComment = () => {
   context.clearRect(0, 0, winX, winY);
@@ -77,18 +82,15 @@ const sendComment = () => {
 }
 
 const onClick = (text) => {
-  context.font = "30px 'Segoe UI'";
+  context.font = "48px 'Segoe UI'";
   context.fillStyle = 'yellow';
-  // const randWards = ["こんにちは","こんにちはこんにちは","これは一体？","やっぱりな","へぇ","それな"];
-  // const no = Math.floor(Math.random() * 6);
-  // const text = randWards[no];
 
   const textWidth = context.measureText(text).width;
 
-  commentArray.push(new Comment(winX, null, text, textWidth));
-}
+  let comment = new Comment(winX, null, text, textWidth);
 
-// canvas.addEventListener('click', onClick, false);
+  commentArray.push(comment);
+}
 
 closeButton.addEventListener('mouseenter', () => {
   win.setIgnoreMouseEvents(false);
