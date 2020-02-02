@@ -1,32 +1,22 @@
-const ipcRenderer = require('electron').ipcRenderer;
-const win = require('electron').remote.getCurrentWindow();
-const Comment = require('./comment');
+const ipcRenderer = require("electron").ipcRenderer;
+const win = require("electron").remote.getCurrentWindow();
+const Comment = require("./comment");
+const Connector = require("./connector");
 
-const canvas = document.getElementById('canvas');
-const closeButton = document.getElementById('close-button');
-const context = canvas.getContext('2d');
+const canvas = document.getElementById("canvas");
+const closeButton = document.getElementById("close-button");
+const context = canvas.getContext("2d");
 const winX = window.parent.screen.width;
 const winY = window.parent.screen.height;
 
 canvas.width = winX;
 canvas.height = winY;
 
-const commentArray = new Array();
+const commentArray = [];
 
-ipcRenderer.on('config', store => {
+ipcRenderer.on("config", store => {
   console.log(store);
 });
-
-const sock = new WebSocket("ws://127.0.0.1:5001");
-
-sock.addEventListener('open', e => {
-  console.log('socket : 接続成功');
-})
-
-sock.addEventListener('message', e => {
-  console.log('event listened : ' + e.data);
-  onClick(e.data);
-})
 
 const defaultY = 48;
 
@@ -36,73 +26,82 @@ const sendComment = () => {
   commentArray.forEach((val1, index1) => {
     val1.x = val1.x - 5;
 
-    if(val1.x < 0 - val1.textWidth) commentArray.splice(index1, 1);
+    if (val1.x < 0 - val1.textWidth) commentArray.splice(index1, 1);
 
-    if(val1.y == null) {
-
+    if (val1.y == null) {
       // y座標の最大値を求める
-      const temp = commentArray.filter(value => value.y != null).map(value => Number(value.y));
+      const temp = commentArray
+        .filter(value => value.y != null)
+        .map(value => Number(value.y));
       let maxY = defaultY;
       temp.forEach(value => {
-        if(value > maxY) {
+        if (value > maxY) {
           maxY = value;
         }
       });
 
       // y座標ごとに重複があるかどうかを調べる
       const tempYArray = [];
-      for(let tempY = defaultY; tempY <= maxY ;) {
+      for (let tempY = defaultY; tempY <= maxY; ) {
         tempYArray.push(tempY);
         tempY = tempY + defaultY;
       }
 
       const isAllOverlaping = !tempYArray.some(tempY => {
         // 対象のy座標の配列をフィルタリング
-        const tempArray = commentArray.filter((value => value.y == tempY));
+        const tempArray = commentArray.filter(value => value.y == tempY);
         // フィルタリングされた配列
         const isOverlap = tempArray.some(val2 => {
           return Comment.isOverlap(val2, val1);
         });
         // 重複していなければ、Yをセットしてループを終了
-        if(!isOverlap) {
+        if (!isOverlap) {
           val1.y = tempY;
           return true;
         }
       });
       // すべて重複していれば一番下に作成する。
-      if(isAllOverlaping) {
+      if (isAllOverlaping) {
         val1.y = maxY + defaultY;
       }
     }
 
     context.fillText(val1.text, val1.x, val1.y);
-  })
+  });
 
-  window.requestAnimationFrame( ts => sendComment(commentArray));
-}
+  window.requestAnimationFrame(ts => sendComment(commentArray));
+};
 
-const onClick = (text) => {
+const pushComment = text => {
   context.font = "48px 'Segoe UI'";
-  context.fillStyle = 'yellow';
+  context.fillStyle = "yellow";
 
   const textWidth = context.measureText(text).width;
 
-  let comment = new Comment(winX, null, text, textWidth);
+  const comment = new Comment(winX, null, text, textWidth);
 
   commentArray.push(comment);
-}
+};
 
-closeButton.addEventListener('mouseenter', () => {
+const connector = new Connector({ a: "a" });
+
+connector.connect(pushComment);
+
+closeButton.addEventListener("mouseenter", () => {
+  console.log("enter");
   win.setIgnoreMouseEvents(false);
 });
-closeButton.addEventListener('mouseleave', () => {
-  win.setIgnoreMouseEvents(false);
+closeButton.addEventListener("mouseleave", () => {
+  console.log("leave");
+  win.setIgnoreMouseEvents(true, { forward: true });
 });
 
-closeButton.addEventListener('click', () => {
-    ipcRenderer.send('press-button', 'puressed');
+closeButton.addEventListener(
+  "click",
+  () => {
+    ipcRenderer.send("press-button", "puressed");
   },
   false
 );
 
-window.onload = window.requestAnimationFrame( ts => sendComment());
+window.onload = window.requestAnimationFrame(ts => sendComment());
