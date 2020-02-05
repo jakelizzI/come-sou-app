@@ -11,7 +11,10 @@ let mainWindow;
 
 const store = new Store({
   defaults: {
-    foo: "bar"
+    ws: {
+      host: "127.0.0.1",
+      port: "5001"
+    }
   }
 });
 
@@ -34,9 +37,7 @@ app.on("ready", () => {
   mainWindow.setIgnoreMouseEvents(true, { forward: true });
   mainWindow.loadURL("file://" + __dirname + "/index.html");
 
-  mainWindow.openDevTools();
-
-  mainWindow.webContents.send("config", store.store);
+  // mainWindow.openDevTools();
 
   mainWindow.on("closed", () => {
     mainWindow = null;
@@ -47,4 +48,9 @@ ipcMain.on("press-button", (e, args) => {
   console.log(args);
   mainWindow = null;
   app.quit();
+});
+
+ipcMain.on("press-config-button", (e, args) => {
+  console.log(args);
+  store.openInEditor();
 });

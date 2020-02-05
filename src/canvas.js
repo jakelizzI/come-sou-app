@@ -5,6 +5,7 @@ const Connector = require("./connector");
 
 const canvas = document.getElementById("canvas");
 const closeButton = document.getElementById("close-button");
+const configButton = document.getElementById("config-button");
 const context = canvas.getContext("2d");
 const winX = window.parent.screen.width;
 const winY = window.parent.screen.height;
@@ -14,11 +15,39 @@ canvas.height = winY;
 
 const commentArray = [];
 
-ipcRenderer.on("config", store => {
-  console.log(store);
+const defaultY = 48;
+
+const connector = new Connector();
+
+connector.connect(context, commentArray);
+
+closeButton.addEventListener("mouseenter", () => {
+  win.setIgnoreMouseEvents(false);
+});
+closeButton.addEventListener("mouseleave", () => {
+  win.setIgnoreMouseEvents(true, { forward: true });
+});
+configButton.addEventListener("mouseenter", () => {
+  win.setIgnoreMouseEvents(false);
+});
+configButton.addEventListener("mouseleave", () => {
+  win.setIgnoreMouseEvents(true, { forward: true });
 });
 
-const defaultY = 48;
+closeButton.addEventListener(
+  "click",
+  () => {
+    ipcRenderer.send("press-button", "puressed");
+  },
+  false
+);
+configButton.addEventListener(
+  "click",
+  () => {
+    ipcRenderer.send("press-config-button", "puressed");
+  },
+  false
+);
 
 const sendComment = () => {
   context.clearRect(0, 0, winX, winY);
@@ -71,37 +100,5 @@ const sendComment = () => {
 
   window.requestAnimationFrame(ts => sendComment(commentArray));
 };
-
-const pushComment = text => {
-  context.font = "48px 'Segoe UI'";
-  context.fillStyle = "yellow";
-
-  const textWidth = context.measureText(text).width;
-
-  const comment = new Comment(winX, null, text, textWidth);
-
-  commentArray.push(comment);
-};
-
-const connector = new Connector({ a: "a" });
-
-connector.connect(pushComment);
-
-closeButton.addEventListener("mouseenter", () => {
-  console.log("enter");
-  win.setIgnoreMouseEvents(false);
-});
-closeButton.addEventListener("mouseleave", () => {
-  console.log("leave");
-  win.setIgnoreMouseEvents(true, { forward: true });
-});
-
-closeButton.addEventListener(
-  "click",
-  () => {
-    ipcRenderer.send("press-button", "puressed");
-  },
-  false
-);
 
 window.onload = window.requestAnimationFrame(ts => sendComment());

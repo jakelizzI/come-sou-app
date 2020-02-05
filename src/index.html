@@ -2,10 +2,17 @@
 <head>
   <meta http-equiv="content-type" charset="utf-8">
   <title>sample</title>
+  <link rel="stylesheet" type="text/css" href="../node_modules/semantic-ui-css/semantic.min.css">
   <link href='./index.css' rel='stylesheet' />
 </head>
 <body>
-  <button type="button" id="close-button">X</button>
-  <canvas id="canvas" width="10" height="10"></canvas>
+  <button class="circular ui icon button" type="button" id="close-button">
+    <i class="sign-out icon"></i>
+  </button>
+  <button class="circular ui icon button" type="button" id="config-button">
+    <i class="book icon"></i>
+  </button>
+  <canvas id="canvas" width="10" height="10">
+  </canvas>
   <script type="text/javascript" src="./canvas.js"></script>
 </body>

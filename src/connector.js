@@ -1,18 +1,22 @@
+const Store = require("electron-store");
+
 module.exports = class Connector {
   /**
-   * WS接続をおこなるクラスのコンストラクタ
-   * @param {*} config JSON
+   * constructor for connectore
+   * @param {*} store electron-store instance
    */
-  constructor(config) {
-    this.config = config;
+  constructor(store) {
+    this.store = new Store();
   }
-
   /**
    * 実際に接続を行うfunction
-   * @param {*} pushComment コメントを配列に追加するfunction
+   * @param {*} canvasContext canvasのコンテキスト
+   * @param {*} commentArray コメントを配列に追加するfunction
    */
-  connect(pushComment) {
-    const sock = new WebSocket("ws://127.0.0.1:5001");
+  connect(canvasContext, commentArray) {
+    const sock = new WebSocket(
+      "ws://" + this.store.get("ws.host") + ":" + this.store.get("ws.port")
+    );
 
     sock.addEventListener("open", e => {
       console.log("socket : 接続成功");
@@ -20,7 +24,14 @@ module.exports = class Connector {
 
     sock.addEventListener("message", e => {
       console.log("event listened : " + e.data);
-      pushComment(e.data);
+
+      canvasContext.font = "48px 'Segoe UI'";
+      canvasContext.fillStyle = "yellow";
+
+      const textWidth = canvasContext.measureText(e.data).width;
+
+      const comment = new Comment(winX, null, e.data, textWidth);
+      commentArray.push(comment);
     });
 
     sock.addEventListener("error", e => {
