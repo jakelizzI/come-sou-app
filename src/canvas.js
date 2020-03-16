@@ -1,11 +1,8 @@
-const ipcRenderer = require("electron").ipcRenderer;
-const win = require("electron").remote.getCurrentWindow();
 const Comment = require("./comment");
 const Connector = require("./connector");
+window.jQuery = window.$ = require("jquery");
 
 const canvas = document.getElementById("canvas");
-const closeButton = document.getElementById("close-button");
-const configButton = document.getElementById("config-button");
 const context = canvas.getContext("2d");
 const winX = window.parent.screen.width;
 const winY = window.parent.screen.height;
@@ -20,34 +17,6 @@ const defaultY = 48;
 const connector = new Connector();
 
 connector.connect(context, commentArray);
-
-closeButton.addEventListener("mouseenter", () => {
-  win.setIgnoreMouseEvents(false);
-});
-closeButton.addEventListener("mouseleave", () => {
-  win.setIgnoreMouseEvents(true, { forward: true });
-});
-configButton.addEventListener("mouseenter", () => {
-  win.setIgnoreMouseEvents(false);
-});
-configButton.addEventListener("mouseleave", () => {
-  win.setIgnoreMouseEvents(true, { forward: true });
-});
-
-closeButton.addEventListener(
-  "click",
-  () => {
-    ipcRenderer.send("press-button", "puressed");
-  },
-  false
-);
-configButton.addEventListener(
-  "click",
-  () => {
-    ipcRenderer.send("press-config-button", "puressed");
-  },
-  false
-);
 
 const sendComment = () => {
   context.clearRect(0, 0, winX, winY);

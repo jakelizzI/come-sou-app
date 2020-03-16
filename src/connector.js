@@ -7,6 +7,7 @@ module.exports = class Connector {
    */
   constructor(store) {
     this.store = new Store();
+    document.getElementById("host").value = this.store.get("ws.host");
   }
   /**
    * 実際に接続を行うfunction

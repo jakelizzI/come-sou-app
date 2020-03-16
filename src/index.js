@@ -53,5 +53,4 @@ ipcMain.on("press-button", (e, args) => {
 
 ipcMain.on("press-config-button", (e, args) => {
   console.log(args);
-  store.openInEditor();
 });
