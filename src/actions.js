@@ -1,12 +1,40 @@
+const Config = require("./config");
 const ipcRenderer = require("electron").ipcRenderer;
 const win = require("electron").remote.getCurrentWindow();
 
 const closeButton = document.getElementById("close-button");
 const configButton = document.getElementById("config-button");
 
-let isNotModalOpen = true;
+const config = new Config();
 
-// config
+// store setting
+$("#host").val(config.getHost());
+$("#port").val(config.getPort());
+$("#slackWebHookUrl").val(config.getSlackApiUrl());
+const slackCheck = $("#slackCheck");
+if (config.getSlackApiToggle() === "on") {
+  slackCheck.prop("checked", true);
+} else {
+  slackCheck.prop("checked", false);
+}
+
+// close
+closeButton.addEventListener("mouseenter", () => {
+  win.setIgnoreMouseEvents(false);
+});
+closeButton.addEventListener("mouseleave", () => {
+  win.setIgnoreMouseEvents(true, { forward: true });
+});
+closeButton.addEventListener(
+  "click",
+  () => {
+    ipcRenderer.send("press-button", "clonse puressed");
+  },
+  false
+);
+
+// modal config
+let isNotModalOpen = true;
 configButton.addEventListener("mouseenter", () => {
   win.setIgnoreMouseEvents(false);
 });
@@ -25,17 +53,26 @@ configButton.addEventListener(
   false
 );
 
-// close
-closeButton.addEventListener("mouseenter", () => {
-  win.setIgnoreMouseEvents(false);
+// modal
+$(".ui.modal").modal("setting", {
+  closable: false,
+  onApprove: () => {
+    connector.reConnect($("#host").val(), $("#port").val());
+  }
 });
-closeButton.addEventListener("mouseleave", () => {
-  win.setIgnoreMouseEvents(true, { forward: true });
+
+// slack url input
+const slackUrlField = $("#slackUrlField");
+if (slackCheck.prop("checked")) {
+  slackUrlField.show();
+} else {
+  slackUrlField.hide();
+}
+
+slackCheck.on("change", event => {
+  if (event.target.checked) {
+    slackUrlField.show();
+  } else {
+    slackUrlField.hide();
+  }
 });
-closeButton.addEventListener(
-  "click",
-  () => {
-    ipcRenderer.send("press-button", "clonse puressed");
-  },
-  false
-);

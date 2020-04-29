@@ -14,11 +14,18 @@ const commentArray = [];
 
 const defaultY = 48;
 
-const connector = new Connector();
+const connector = new Connector(context, commentArray);
 
-connector.connect(context, commentArray);
+const sock = connector.defaultConnect();
 
 const sendComment = () => {
+  // if (sock.readyState === WebSocket.CLOSED && connector.isConnected()) {
+  //   alert("サーバーとの接続が切れました");
+  //   connector.setConnectStatus("disconnected");
+  // } else if (!connector.isConnected) {
+  //   return;
+  // }
+
   context.clearRect(0, 0, winX, winY);
 
   commentArray.forEach((val1, index1) => {

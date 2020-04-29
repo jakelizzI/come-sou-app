@@ -14,9 +14,12 @@ const store = new Store({
     ws: {
       host: "127.0.0.1",
       port: "5001"
+    },
+    slackApi: {
+      toggle: "off",
+      url: "apiurl"
     }
-  },
-  slackApi: "apiurl"
+  }
 });
 
 app.on("ready", () => {

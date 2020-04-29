@@ -21,9 +21,40 @@
       設定
     </div>
     <div class="content">
-      <div class="ui labeled input">
-        <div class="ui label">接続先URL</div>
-        <input id="host" type="text" placeholder="wss://...">
+      <div class="ui form">
+        <div class="two fields">
+          <div class="field">
+            <div class="ui labeled input">
+              <div class="ui label">接続先URL</div>
+              <input id="host" type="text" placeholder="127.0.0.1">
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui labeled input">
+              <div class="ui label">接続先ポート番号</div>
+              <input id="port" type="text" placeholder="5001">
+            </div>
+          </div>
+      </div>
+        <div class="field">
+          <div class="ui toggle checkbox">
+            <input type="checkbox" id="slackCheck" />
+            <label for="slackCheck">Slack通知</label>
+          </div>
+        </div>
+        <div class="field" id="slackUrlField">
+          <div class="ui labeled input">
+            <div class="ui label">Slack通知用フックURL</div>
+            <input id="slackWebHookUrl" type="text" placeholder="xxx-xxx-xxx">
+          </div>
+        </div>
+        <div class="actions">
+          <div class="ui black deny left button">
+            キャンセル
+          </div>
+          <div class="ui primary ok right floated button">
+            設定
+          </div>
       </div>
     </div>
   </div>
