@@ -2,12 +2,13 @@ const builder = require("electron-builder");
 
 builder.build({
   config: {
-    appId: "local.test.app1",
+    appId: "comesou-app.jakelizzi",
     win: {
       target: {
         target: "zip",
         arch: ["x64", "ia32"]
-      }
+      },
+      icon: "image/win.ico"
     }
   }
 });

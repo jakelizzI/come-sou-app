@@ -17,6 +17,14 @@ module.exports = class Config {
   }
 
   /**
+   * WebSocket接続先ホスト設定
+   * @param {string} host
+   */
+  setHost(host) {
+    this.store.set("ws.host", host);
+  }
+
+  /**
    * WebSocket接続先ポート取得
    * @return {string} port
    */
@@ -25,7 +33,15 @@ module.exports = class Config {
   }
 
   /**
-   * SlackApi用URL
+   * WebSocket接続先ポート設定
+   * @param {string} port
+   */
+  setPort(port) {
+    this.store.set("ws.port", port);
+  }
+
+  /**
+   * SlackApi用URL取得
    * @return {string} url
    */
   getSlackApiUrl() {
@@ -33,10 +49,45 @@ module.exports = class Config {
   }
 
   /**
-   * SlackApi toggle
+   * SlackApi用URL設定
+   * @param {string} url
+   */
+  setSlackApiUrl(url) {
+    this.store.set("slackApi.url", url);
+  }
+
+  /**
+   * SlackApi toggle 取得
    * @return {string} toggle : on / off
    */
   getSlackApiToggle() {
     return this.store.get("slackApi.toggle");
+  }
+
+  /**
+   * SlackApi toggle設定
+   * value : on / off
+   * @param {string} onOff
+   */
+  setSlackApiToggle(onOff) {
+    this.store.set("slackApi.toggle", onOff);
+  }
+
+  /**
+   * SlackApi toggle が on なら true
+   * @return {boolean} on : true, off : false
+   */
+  isSlackToggleOn() {
+    return this.getSlackApiToggle() === "on";
+  }
+
+  /**
+   * 設定画面でslackapiに関する設定を更新する。
+   * @param {boolean} toggle slackApiのcheckbox
+   * @param {string} url slackApiのwebhookURL
+   */
+  setSlackApiConfig(toggle, url) {
+    this.setSlackApiToggle(toggle);
+    this.setSlackApiUrl(url);
   }
 };

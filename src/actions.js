@@ -8,15 +8,17 @@ const configButton = document.getElementById("config-button");
 const config = new Config();
 
 // store setting
-$("#host").val(config.getHost());
-$("#port").val(config.getPort());
-$("#slackWebHookUrl").val(config.getSlackApiUrl());
+const host = $("#host");
+const port = $("#port");
 const slackCheck = $("#slackCheck");
-if (config.getSlackApiToggle() === "on") {
-  slackCheck.prop("checked", true);
-} else {
-  slackCheck.prop("checked", false);
-}
+const slackWebHookUrl = $("#slackWebHookUrl");
+const resetConfig = () => {
+  host.val(config.getHost());
+  port.val(config.getPort());
+  slackCheck.prop("checked", config.isSlackToggleOn());
+  slackWebHookUrl.val(config.getSlackApiUrl());
+};
+resetConfig();
 
 // close
 closeButton.addEventListener("mouseenter", () => {
@@ -57,22 +59,41 @@ configButton.addEventListener(
 $(".ui.modal").modal("setting", {
   closable: false,
   onApprove: () => {
-    connector.reConnect($("#host").val(), $("#port").val());
+    if (slackCheck.prop("checked")) {
+      config.setSlackApiConfig(
+        slackCheck.prop("checked"),
+        slackWebHookUrl.val()
+      );
+    } else {
+      slackWebHookUrl.val(config.getSlackApiUrl());
+    }
+    win.setIgnoreMouseEvents(true, { forward: true });
+  },
+  onDeny: () => {
+    resetConfig();
+    slackCheck.prop("checked") ? slackUrlField.show() : slackUrlField.hide();
+    win.setIgnoreMouseEvents(true, { forward: true });
   }
+});
+
+// reconnect
+$("#connectButton").on("click", () => {
+  connector.reConnect(host.val(), port.val());
 });
 
 // slack url input
 const slackUrlField = $("#slackUrlField");
-if (slackCheck.prop("checked")) {
-  slackUrlField.show();
-} else {
-  slackUrlField.hide();
-}
+slackCheck.prop("checked") ? slackUrlField.show() : slackUrlField.hide();
 
 slackCheck.on("change", event => {
+  event.target.checked ? slackUrlField.show() : slackUrlField.hide();
+});
+
+// devTools
+$("#devToolCheck").on("change", event => {
   if (event.target.checked) {
-    slackUrlField.show();
+    win.toggleDevTools();
   } else {
-    slackUrlField.hide();
+    win.toggleDevTools();
   }
 });

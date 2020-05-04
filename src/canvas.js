@@ -16,15 +16,29 @@ const defaultY = 48;
 
 const connector = new Connector(context, commentArray);
 
-const sock = connector.defaultConnect();
+connector.defaultConnect();
+let sockStatus = WebSocket.CLOSED;
+const statusMessage = $("#connectStatusMessage");
+const statusChange = status => {
+  switch (status) {
+    case WebSocket.CLOSED:
+      statusMessage.removeClass("green");
+      statusMessage.addClass("red");
+      statusMessage.text("接続エラー");
+      break;
+    case WebSocket.OPEN:
+      statusMessage.removeClass("red");
+      statusMessage.addClass("green");
+      statusMessage.text("接続中");
+      break;
+  }
+};
 
 const sendComment = () => {
-  // if (sock.readyState === WebSocket.CLOSED && connector.isConnected()) {
-  //   alert("サーバーとの接続が切れました");
-  //   connector.setConnectStatus("disconnected");
-  // } else if (!connector.isConnected) {
-  //   return;
-  // }
+  if (connector.getSocketStatus() !== sockStatus) {
+    statusChange(connector.getSocketStatus());
+    sockStatus = connector.getSocketStatus();
+  }
 
   context.clearRect(0, 0, winX, winY);
 

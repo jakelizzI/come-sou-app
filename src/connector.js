@@ -1,4 +1,4 @@
-const Store = require("electron-store");
+const Config = require("./config");
 
 module.exports = class Connector {
   /**
@@ -7,12 +7,9 @@ module.exports = class Connector {
    * @param {*} commentArray コメントを配列に追加するfunction
    */
   constructor(canvasContext, commentArray) {
-    this.store = new Store();
-    document.getElementById("host").value = this.store.get("ws.host");
-    document.getElementById("port").value = this.store.get("ws.port");
+    this.config = new Config();
     this.canvasContext = canvasContext;
     this.commentArray = commentArray;
-    this.connectStatus = "disconnected";
     this.sock = null;
   }
 
@@ -21,9 +18,7 @@ module.exports = class Connector {
    * @return {object} websocket instance
    */
   defaultConnect() {
-    const url = `ws://${this.store.get("ws.host")}:${this.store.get(
-      "ws.port"
-    )}`;
+    const url = `ws://${this.config.getHost()}:${this.config.getPort()}`;
     return this.connect(url);
   }
 
@@ -33,15 +28,9 @@ module.exports = class Connector {
    * @param {number} port websocket接続先port
    */
   reConnect(host, port) {
-    if (
-      host === this.store.get("ws.host") &&
-      port === this.store.get("ws.port")
-    ) {
-      return;
-    }
     console.log(`reconnect : ${host} : ${port}`);
-    this.store.set("ws.host", host);
-    this.store.set("ws.port", port);
+    this.config.setHost(host);
+    this.config.setPort(port);
     this.sock.close(1000, "To change connection.");
     this.connect(`ws://${host}:${port}`);
   }
@@ -56,7 +45,6 @@ module.exports = class Connector {
 
     this.sock.addEventListener("open", e => {
       console.log("socket : 接続成功");
-      this.connectStatus = "connected";
     });
 
     this.sock.addEventListener("message", e => {
@@ -77,26 +65,9 @@ module.exports = class Connector {
       alert(
         "サーバーに接続できませんでした。\n右下の設定から接続先を指定して下さい。"
       );
-      this.connectStatus = "disconnected";
     });
 
     return this.sock;
-  }
-
-  /**
-   * 接続されているかどうか
-   * @return {boolean} true : 接続成功 / false : 接続失敗
-   */
-  isConnected() {
-    return this.connectStatus === "connected";
-  }
-
-  /**
-   * 接続ステータス
-   * @param {string} status
-   */
-  setConnectStatus(status) {
-    this.connectStatus = status;
   }
 
   /**
@@ -104,15 +75,11 @@ module.exports = class Connector {
    * @param {*} comment comment
    */
   sendToSlack(comment) {
-    console.log("!!!!!");
-    console.log(this.store.get("slackApi"));
-    console.log(this.store.get("slackApi.toggle"));
-    console.log(this.store.get("slackApi.url"));
-    if (this.store.get("slackApi.toggle") === "off") return;
+    if (!this.config.isSlackToggleOn()) return;
     const data = {
       text: comment
     };
-    const url = this.store.get("slackApi.url");
+    const url = this.config.getSlackApiUrl();
 
     // eslint-disable-next-line no-undef
     fetch(url, {
@@ -123,5 +90,13 @@ module.exports = class Connector {
       },
       body: JSON.stringify(data)
     });
+  }
+
+  /**
+   * socket の readyState を返却する
+   * @return {number} WebSocketのstatus
+   */
+  getSocketStatus() {
+    return this.sock.readyState;
   }
 };

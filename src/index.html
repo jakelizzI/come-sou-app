@@ -17,28 +17,55 @@
   <canvas id="canvas" width="10" height="10">
   </canvas>
   <div class="ui modal" id="setting">
+    <div class="ui attached green message" id="connectStatusMessage"></div>
     <div class="header">
-      設定
+      <div class="ui grid">
+        <div class="two column row">
+          <div class="left floated column">
+            設定
+          </div>
+          <div class="right floated right aligned column ">
+            <div class="ui toggle checkbox">
+              <input type="checkbox" id="devToolCheck" tabindex="0" />
+              <label for="devToolCheck">DevTool</label>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="content">
       <div class="ui form">
-        <div class="two fields">
-          <div class="field">
-            <div class="ui labeled input">
-              <div class="ui label">接続先URL</div>
-              <input id="host" type="text" placeholder="127.0.0.1">
-            </div>
-          </div>
-          <div class="field">
-            <div class="ui labeled input">
-              <div class="ui label">接続先ポート番号</div>
-              <input id="port" type="text" placeholder="5001">
-            </div>
-          </div>
-      </div>
+        <h4 class="ui horizontal divider header">
+          接続設定
+        </h4>
         <div class="field">
+          <div class="two fields">
+            <div class="field">
+              <div class="ui labeled input">
+                <div class="ui label">接続先URL</div>
+                <input id="host" type="text" placeholder="127.0.0.1">
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui labeled input">
+                <div class="ui label">接続先ポート番号</div>
+                <input id="port" type="text" placeholder="5001">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <button class="ui right floated basic positive button" type="button" id="connectButton">テスト接続</button>
+        </div>
+        <div class="field">
+          <div class="ui right aligned basic segment">※テスト接続に成功した場合は、設定を保存しなくても接続しっぱなしになります。</div>
+        </div>
+        <div class="field">
+          <h4 class="ui horizontal divider header">
+            Slack通知設定
+          </h4>
           <div class="ui toggle checkbox">
-            <input type="checkbox" id="slackCheck" />
+            <input type="checkbox" id="slackCheck" tabindex="0" />
             <label for="slackCheck">Slack通知</label>
           </div>
         </div>
@@ -53,7 +80,7 @@
             キャンセル
           </div>
           <div class="ui primary ok right floated button">
-            設定
+            保存
           </div>
       </div>
     </div>

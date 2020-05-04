@@ -41,8 +41,6 @@ app.on("ready", () => {
   mainWindow.setIgnoreMouseEvents(true, { forward: true });
   mainWindow.loadURL("file://" + __dirname + "/index.html");
 
-  mainWindow.openDevTools();
-
   mainWindow.on("closed", () => {
     mainWindow = null;
   });
