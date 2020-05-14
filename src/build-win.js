@@ -8,7 +8,7 @@ builder.build({
         target: "zip",
         arch: ["x64", "ia32"]
       },
-      icon: "image/win.ico"
+      icon: "image/icon.ico"
     }
   }
 });

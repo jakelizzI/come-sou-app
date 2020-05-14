@@ -6,14 +6,15 @@
   "icon": "image/win.ico",
   "scripts": {
     "start": "electron src/index.js",
-    "build-win": "node src/build-win.js --icon=image/win.ico"
+    "build-win": "node src/build-win.js",
+    "build-mac": "node src/build-mac.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "electron-store": "^5.1.0",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.1",
     "semantic-ui-css": "^2.4.1"
   },
   "devDependencies": {
