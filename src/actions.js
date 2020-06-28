@@ -101,3 +101,13 @@ $("#devToolCheck").on("change", event => {
     win.toggleDevTools();
   }
 });
+
+// detault server
+$("#defaultHost").on("click", event => {
+  const defaultHost = "ec2-54-65-94-81.ap-northeast-1.compute.amazonaws.com";
+  const defaultPort = "5001";
+  host.val(defaultHost);
+  port.val(defaultPort);
+  config.setHost(defaultHost);
+  config.setPort(defaultPort);
+});

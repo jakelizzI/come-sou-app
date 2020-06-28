@@ -13,7 +13,7 @@ let mainWindow;
 const store = new Store({
   defaults: {
     ws: {
-      host: "127.0.0.1",
+      host: "ec2-54-65-94-81.ap-northeast-1.compute.amazonaws.com",
       port: "5001"
     },
     slackApi: {
