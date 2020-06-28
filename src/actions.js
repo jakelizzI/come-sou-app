@@ -20,6 +20,10 @@ const resetConfig = () => {
 };
 resetConfig();
 
+// uuid
+const uuid = $("#uuid");
+uuid.text(config.getUUID());
+
 // close
 closeButton.addEventListener("mouseenter", () => {
   win.setIgnoreMouseEvents(false);
@@ -96,4 +100,14 @@ $("#devToolCheck").on("change", event => {
   } else {
     win.toggleDevTools();
   }
+});
+
+// detault server
+$("#defaultHost").on("click", event => {
+  const defaultHost = "ec2-54-65-94-81.ap-northeast-1.compute.amazonaws.com";
+  const defaultPort = "5001";
+  host.val(defaultHost);
+  port.val(defaultPort);
+  config.setHost(defaultHost);
+  config.setPort(defaultPort);
 });

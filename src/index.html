@@ -34,10 +34,18 @@
       </div>
     </div>
     <div class="content">
+      <h4 class="ui horizontal divider header">
+        UUID
+      </h4>
+      <div id="uuid" class="ui center aligned secondary segment"></div>
       <div class="ui form">
         <h4 class="ui horizontal divider header">
           接続設定
         </h4>
+        <div class="field">
+          <button class="ui button" type="button" id="defaultHost">デフォルトサーバ設定にする</button>
+          ※下記の設定が書き換わります
+        </div>
         <div class="field">
           <div class="two fields">
             <div class="field">
@@ -55,10 +63,10 @@
           </div>
         </div>
         <div class="field">
-          <button class="ui right floated basic positive button" type="button" id="connectButton">テスト接続</button>
+          <button class="ui right floated basic positive button" type="button" id="connectButton">接続</button>
         </div>
         <div class="field">
-          <div class="ui right aligned basic segment">※テスト接続に成功した場合は、設定を保存しなくても接続しっぱなしになります。</div>
+          <div class="ui right aligned basic segment">※接続に成功した場合は、設定を保存しなくても接続しっぱなしになります。</div>
         </div>
         <div class="field">
           <h4 class="ui horizontal divider header">

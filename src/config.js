@@ -90,4 +90,12 @@ module.exports = class Config {
     this.setSlackApiToggle(toggle);
     this.setSlackApiUrl(url);
   }
+
+  /**
+   * このアプリケーションのUUIDを取得する
+   * @return {string} uuid
+   */
+  getUUID() {
+    return this.store.get("uuid");
+  }
 };

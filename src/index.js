@@ -2,6 +2,7 @@
 
 const electron = require("electron");
 const Store = require("electron-store");
+const { v4: uuidv4 } = require("uuid");
 
 const ipcMain = electron.ipcMain;
 const app = electron.app;
@@ -12,7 +13,7 @@ let mainWindow;
 const store = new Store({
   defaults: {
     ws: {
-      host: "127.0.0.1",
+      host: "ec2-54-65-94-81.ap-northeast-1.compute.amazonaws.com",
       port: "5001"
     },
     slackApi: {
@@ -27,6 +28,11 @@ app.on("ready", () => {
   const { width, height } = electron.screen.getPrimaryDisplay().workAreaSize;
   store.set("monitorWidth", width);
   store.set("monitorHight", height);
+
+  if (!store.get("uuid")) {
+    const uuid = uuidv4();
+    store.set("uuid", uuid);
+  }
 
   mainWindow = new BrowserWindow({
     width: store.get("monitorWidth"),
