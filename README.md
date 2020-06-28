@@ -2,6 +2,12 @@
 
 コメ送のElectronアプリ
 
+## とりあえず始める
+
+1. releaseからアプリをダウンロードする。( https://github.com/jakelizzI/come-sou-app/releases/tag/0.2.0-alpha )
+2. アプリ起動後に、設定画面にあるUUIDを共有する
+3. http://comesou-view.s3-ap-northeast-1.amazonaws.com/index.html からコメントを送信する
+
 ## 詳細
 
 画面上にニコニコ動画風コメントを流すためのデスクトップアプリケーション。
@@ -51,6 +57,12 @@
 # come-sou-app
 
 Electron application for come-sou.
+
+## Just get started.
+
+1. download the app from release. ( https://github.com/jakelizzI/come-sou-app/releases/tag/0.2.0-alpha )
+2. share the UUID in the settings screen after launching the app
+3. Send a comment from http://comesou-view.s3-ap-northeast-1.amazonaws.com/index.html 
 
 ## detail
 
