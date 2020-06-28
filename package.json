@@ -1,6 +1,6 @@
 {
   "name": "come-sou",
-  "version": "0.1.0-alpha",
+  "version": "0.2.0-alpha",
   "description": "ニコニコ風にコメントを画面上に流すアプリケーションです。come-sou-serverと一緒に使用します。",
   "main": "src/index.js",
   "icon": "image/win.ico",
