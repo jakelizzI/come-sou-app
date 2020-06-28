@@ -20,6 +20,10 @@ const resetConfig = () => {
 };
 resetConfig();
 
+// uuid
+const uuid = $("#uuid");
+uuid.text(config.getUUID());
+
 // close
 closeButton.addEventListener("mouseenter", () => {
   win.setIgnoreMouseEvents(false);

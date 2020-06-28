@@ -2,6 +2,7 @@
 
 const electron = require("electron");
 const Store = require("electron-store");
+const { v4: uuidv4 } = require("uuid");
 
 const ipcMain = electron.ipcMain;
 const app = electron.app;
@@ -27,6 +28,11 @@ app.on("ready", () => {
   const { width, height } = electron.screen.getPrimaryDisplay().workAreaSize;
   store.set("monitorWidth", width);
   store.set("monitorHight", height);
+
+  if (!store.get("uuid")) {
+    const uuid = uuidv4();
+    store.set("uuid", uuid);
+  }
 
   mainWindow = new BrowserWindow({
     width: store.get("monitorWidth"),

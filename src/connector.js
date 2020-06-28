@@ -41,7 +41,7 @@ module.exports = class Connector {
    * @return {object} websocket instance
    */
   connect(url) {
-    this.sock = new WebSocket(url);
+    this.sock = new WebSocket(url, this.config.getUUID());
 
     this.sock.addEventListener("open", e => {
       console.log("socket : 接続成功");
