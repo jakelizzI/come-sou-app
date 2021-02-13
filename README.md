@@ -2,6 +2,8 @@
 
 コメ送のElectronアプリ
 
+**現在はデフォルト接続先のサーバーを止めています。**
+
 ## とりあえず始める
 
 1. releaseからアプリをダウンロードする。( https://github.com/jakelizzI/come-sou-app/releases/tag/0.2.0-alpha )
@@ -57,6 +59,8 @@
 # come-sou-app
 
 Electron application for come-sou.
+
+**We have now stopped the default connection to the server.**
 
 ## Just get started.
 
